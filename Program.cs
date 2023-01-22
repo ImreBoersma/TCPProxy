@@ -1,8 +1,8 @@
 ﻿using CliFx;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using TCPProxy;
 using TCPProxy.Commands;
+using TCPProxy.Providers;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()

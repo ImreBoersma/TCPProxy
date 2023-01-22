@@ -1,7 +1,7 @@
 ﻿using CliFx;
 using CliFx.Attributes;
 using CliFx.Infrastructure;
-using Serilog;
+using TCPProxy.Providers;
 
 namespace TCPProxy.Commands;
 

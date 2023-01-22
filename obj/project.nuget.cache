@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "RXK39HCP5PZziygy46MSlbfty6emEMNihBmXwtUyhyPwnKIwvg0/f7BVKiGt3UHEZILAN8+1Brse7tSdx76wqw==",
+  "dgSpecHash": "dCMwDEqnEoxNIuXDslTQwuMmujYbbwotm4E9/YGSmr72/mWEEpe8fOMq1v+UCJjSVcRngeJJbXmMTGJdoSmyvw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\imreb\\RiderProjects\\TCPProxy\\TCPProxy.csproj",
+  "projectFilePath": "D:\\projects\\SChool\\TCPProxy\\TCPProxy.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\imreb\\.nuget\\packages\\clifx\\2.3.1\\clifx.2.3.1.nupkg.sha512",
     "C:\\Users\\imreb\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\5.0.0\\microsoft.bcl.asyncinterfaces.5.0.0.nupkg.sha512",
