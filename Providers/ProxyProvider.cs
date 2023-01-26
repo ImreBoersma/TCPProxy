@@ -10,17 +10,25 @@ public class ProxyProvider
 {
     private readonly Socket _proxySocket = new(IPAddress.Any.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
     private readonly BufferManager _bufferManager = BufferManager.CreateBufferManager(100, 8192);
+    private bool Cache { get; set; }
+    private bool MaskImages { get; set; }
+    private bool Incognito { get; set; }
+    private ushort Port { get; set; }
 
-    public async ValueTask<Task> StartProxy(bool cache, bool maskImages, bool incognito, int port)
+    public async ValueTask<Task> StartProxy(bool cache, bool maskImages, bool incognito, ushort port)
     {
+        Port = port;
+        Cache = cache;
+        MaskImages = maskImages;
+        Incognito = incognito;
+
         Log.Information("Starting proxy...");
         _proxySocket.Bind(new IPEndPoint(IPAddress.Any, port));
-        _proxySocket.Listen(10);
-        Log.Information("Proxy started with the following settings:");
-        Log.Information("Cache: {Cache}", cache);
-        Log.Information("MaskImages: {MaskImages}", maskImages);
-        Log.Information("Private: {Incognito}", incognito);
-        Log.Information("Proxy listening on {IPAddress}:{Port}", IPAddress.Any, port);
+        _proxySocket.Listen();
+        Log.Debug("Proxy started with the following settings:");
+        Log.Debug("Cache: {Cache}", cache);
+        Log.Debug("MaskImages: {MaskImages}", maskImages);
+        Log.Debug("Private: {Incognito}", incognito);
 
         while (true)
         {
@@ -64,8 +72,14 @@ public class ProxyProvider
 
     public void StopProxy(bool force)
     {
-        if (force) _proxySocket.Shutdown(SocketShutdown.Both);
+        if (force)
+        {
+            Log.Information("Stopping proxy with force");
+            _proxySocket.Shutdown(SocketShutdown.Both);
+            return;
+        }
+
         _proxySocket.Close();
-        Log.Information("Stopping proxy " + (force ? "with force" : ""));
+        Log.Information("Stopping proxy...");
     }
 }
