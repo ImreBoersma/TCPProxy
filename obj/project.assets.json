@@ -1222,11 +1222,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\projects\\SChool\\TCPProxy\\TCPProxy.csproj",
+      "projectUniqueName": "C:\\Users\\imreb\\RiderProjects\\TCPProxy\\TCPProxy.csproj",
       "projectName": "TCPProxy",
-      "projectPath": "D:\\projects\\SChool\\TCPProxy\\TCPProxy.csproj",
+      "projectPath": "C:\\Users\\imreb\\RiderProjects\\TCPProxy\\TCPProxy.csproj",
       "packagesPath": "C:\\Users\\imreb\\.nuget\\packages\\",
-      "outputPath": "D:\\projects\\SChool\\TCPProxy\\obj\\",
+      "outputPath": "C:\\Users\\imreb\\RiderProjects\\TCPProxy\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -1293,7 +1293,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

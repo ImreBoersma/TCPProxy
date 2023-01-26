@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ca4035e-24c1-40be-8b78-d3e2c91c0cfd" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Models/Endpoint.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TCPProxy.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TCPProxy.dir/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Commands/StartCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Commands/StartCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Commands/StopCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Commands/StopCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProxyProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Providers/ProxyProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Providers/ProxyProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Providers/ProxyProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TCPProxy.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/TCPProxy.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/TCPProxy.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/TCPProxy.csproj.nuget.dgspec.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.assets.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.nuget.cache" afterDir="false" />
@@ -18,6 +18,18 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/137bf7176cc8c247ebbf474f32ea63bb407b875c5866e94c534829f893/CommandAttribute.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/5272659a3a2ed3fc52b8447da96ffb91e6e446a6866325e2c11618292039d/ICommand.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/708a26c47191eec2b9ceac9cebb515b1f943ac7f66499fa867496a63a4ae/Socket.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9a7fcb3e577494cf37e52ae09d8a64c9adc6cb2160d039b716a1d64158152f38/CliApplicationBuilder.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/efaa7de985ac72768591fcc5269db133ade6e7f16d0c473c054ed9d6b32cd/UInt16.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/imreb/RiderProjects/TCPProxy/Commands/StartCommand.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/imreb/RiderProjects/TCPProxy/Providers/ProxyProvider.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -81,6 +93,8 @@
       <workItem from="1674123463307" duration="22541000" />
       <workItem from="1674303079991" duration="42000" />
       <workItem from="1674303143734" duration="2747000" />
+      <workItem from="1674465742920" duration="20044000" />
+      <workItem from="1674724516158" duration="795000" />
     </task>
     <servers />
   </component>
