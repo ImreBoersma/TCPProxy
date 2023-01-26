@@ -21,7 +21,7 @@ public class StartCommand : ICommand
     public bool Incognito { get; init; } = false;
 
     [CommandOption("port", 'p', Description = "Port to listen on")]
-    public int Port { get; init; } = 8080;
+    public ushort Port { get; init; } = 8080;
 
     public StartCommand(ProxyProvider proxyProvider)
     {
