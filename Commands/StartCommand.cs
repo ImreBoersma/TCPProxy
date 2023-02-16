@@ -1,14 +1,21 @@
 ﻿using CliFx;
 using CliFx.Attributes;
 using CliFx.Infrastructure;
+using TCPProxy.Models;
 using TCPProxy.Providers;
+
+// Disable suggestion for initializing fields in constructor (injected by CliFx)
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
+// Disable warning for unused private fields (injected by CliFx)
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace TCPProxy.Commands;
 
 [Command(name: "start", Description = "Starts the proxy")]
 public class StartCommand : ICommand
 {
-    private readonly ProxyProvider _proxyProvider;
+    private readonly TcpProxyServer _tcpProxyServer;
 
     [CommandOption("cache", 'c', Description = "Enable cache")]
     public bool Cache { get; init; } = false;
@@ -23,13 +30,14 @@ public class StartCommand : ICommand
     [CommandOption("port", 'p', Description = "Port to listen on")]
     public ushort Port { get; init; } = 8080;
 
-    public StartCommand(ProxyProvider proxyProvider)
+    public StartCommand(TcpProxyServer tcpProxyServer)
     {
-        _proxyProvider = proxyProvider;
+        _tcpProxyServer = tcpProxyServer;
     }
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
-        await _proxyProvider.StartProxy(Cache, MaskImages, Incognito, Port);
+        var options = new ProxyConfigurationModel(Cache, MaskImages, Incognito, Port);
+        await _tcpProxyServer.StartProxy(options, new CancellationToken(false));
     }
 }

@@ -11,7 +11,7 @@ Log.Logger = new LoggerConfiguration()
 
 var services = new ServiceCollection();
 
-services.AddSingleton<ProxyProvider>();
+services.AddSingleton<TcpProxyServer>();
 
 services.AddTransient<StartCommand>();
 
