@@ -4,7 +4,7 @@ using CliFx.Infrastructure;
 using TCPProxy.Models;
 using TCPProxy.Providers;
 
-// Disable suggestion for initializing fields in constructor (injected by CliFx)
+// Disable suggestion to make property get-only (injected by CliFx)
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
 // Disable warning for unused private fields (injected by CliFx)

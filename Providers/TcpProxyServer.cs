@@ -10,7 +10,7 @@ namespace TCPProxy.Providers;
 public class TcpProxyServer
 {
     private readonly Socket _proxySocket = new(IPAddress.Any.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-    private readonly BufferHelper _bufferHelper = new(8192);
+    private readonly BufferHelper _bufferHelper = new(32768);
 
     public async ValueTask<Task?> StartProxy(ProxyConfigurationModel configuration, CancellationToken stoppingToken)
     {
@@ -22,36 +22,32 @@ public class TcpProxyServer
         while (!stoppingToken.IsCancellationRequested)
         {
             using var clientSocket = await _proxySocket.AcceptAsync(stoppingToken);
-            var initialBuffer = _bufferHelper.TakeBuffer();
-            var (bufferReceived, bytesReceived) =
+            var initialBuffer = _bufferHelper.TakeBuffer(32768);
+            var clientHttpMessage =
                 await _bufferHelper.ExecuteReceiveAsync(BufferHelper.ReceiveMethod, clientSocket, initialBuffer,
                     stoppingToken);
 
-            if (bufferReceived is null) continue;
+            var serverUrl = ExtractHeader(clientHttpMessage, HttpRequestHeader.Host);
 
-            var serverUrl = ExtractHeader(bufferReceived, bytesReceived, HttpRequestHeader.Host);
-
-            Log.Information("Request received from {ClientIp}", clientSocket.RemoteEndPoint);
-
-            var ipAddress = new Endpoint(serverUrl);
+            Log.Information("Request received from {ClientIp}", clientSocket.RemoteEndPoint?.ToString());
 
             var serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            await serverSocket.ConnectAsync(ipAddress, stoppingToken);
-            Log.Debug("Connected to server {ServerIp}", serverSocket.RemoteEndPoint);
+            await serverSocket.ConnectAsync(new Endpoint(serverUrl), stoppingToken);
+            Log.Debug("Connected to server {ServerIp}", serverSocket.RemoteEndPoint?.ToString());
 
-            await BufferHelper.ExecuteSendAsync(BufferHelper.SendMethod, serverSocket, bufferReceived, bytesReceived,
+            await BufferHelper.ExecuteSendAsync(BufferHelper.SendMethod, serverSocket, clientHttpMessage.Buffer, clientHttpMessage.Bytes,
                 stoppingToken);
-            Log.Information("Request forwarded to {Server}", serverSocket.RemoteEndPoint);
+            Log.Information("Request forwarded to {Server}", serverSocket.RemoteEndPoint?.ToString());
 
-            var (serverBufferReceived, serverBytesReceived) =
-                await _bufferHelper.ExecuteReceiveAsync(BufferHelper.ReceiveMethod, serverSocket, bufferReceived,
+            var serverHttpMessage =
+                await _bufferHelper.ExecuteReceiveAsync(BufferHelper.ReceiveMethod, serverSocket, clientHttpMessage.Buffer,
                     stoppingToken);
-            Log.Information("Response received from {ServerIp}", serverSocket.RemoteEndPoint);
+            if (configuration.GetMaskImages()) serverHttpMessage = MaskImage(serverHttpMessage);
+            Log.Information("Response received from {ServerIp}:\n {Request}", serverSocket.RemoteEndPoint?.ToString(), serverHttpMessage.ToString());
 
-            if (serverBufferReceived == null) continue;
-            await BufferHelper.ExecuteSendAsync(BufferHelper.SendMethod, clientSocket, serverBufferReceived,
-                serverBytesReceived, stoppingToken);
-            Log.Information("Response forwarded to {Client}", clientSocket.RemoteEndPoint?.ToString());
+            await BufferHelper.ExecuteSendAsync(BufferHelper.SendMethod, clientSocket, serverHttpMessage.Buffer,
+                serverHttpMessage.Bytes, stoppingToken);
+            Log.Information("Response forwarded to client");
 
             Log.Information("Proxying finished, waiting for new request...");
         }

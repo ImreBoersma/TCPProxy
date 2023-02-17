@@ -9,14 +9,22 @@ public record Endpoint
     public Endpoint(string hostAndPort)
     {
         var parts = hostAndPort.Split(':');
-        if (parts.Length != 2)
+        switch (parts.Length)
         {
-            Host = hostAndPort;
-            Port = 80;
+            case 1:
+                Host = hostAndPort;
+                Port = 80;
+                break;
+            case 2:
+                Host = parts[0];
+                Port = ushort.TryParse(parts[1], out var port) ? port : (ushort) 80;
+                break;
+            default:
+                Log.Warning("Invalid host and port: {HostAndPort}", hostAndPort);
+                Host = "localhost";
+                Port = 80;
+                break;
         }
-
-        Host = parts[0];
-        Port = ushort.Parse(parts[1]);
     }
 
     public Endpoint(IPAddress address, ushort port = 8080)
@@ -36,18 +44,18 @@ public record Endpoint
     public static implicit operator IPEndPoint(Endpoint endpoint)
     {
         var hostEntry = Dns.GetHostEntry(endpoint.Host);
-        var ipAddresses = hostEntry.AddressList.Where(a => a.AddressFamily == AddressFamily.InterNetwork);
+        var ipAddresses = hostEntry.AddressList.Where(a => a.AddressFamily == AddressFamily.InterNetwork).ToList();
 
         if (!ipAddresses.Any())
         {
-            Log.Warning("No valid addresses found for {Host}.", endpoint.Host);
+            Log.Warning("No valid addresses found for {Host}", endpoint.Host);
             return new IPEndPoint(IPAddress.Loopback, 80);
         }
 
-        if (ipAddresses.Count() == 1)
+        if (ipAddresses.Count == 1)
         {
             var address = ipAddresses.First();
-            Log.Debug("Selected {Address} to forward request to.", address.ToString());
+            Log.Debug("Selected {Address} to forward request to", address.ToString());
             return new IPEndPoint(address, endpoint.Port);
         }
 
