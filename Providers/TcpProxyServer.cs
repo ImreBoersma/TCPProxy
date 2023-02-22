@@ -23,9 +23,7 @@ public class TcpProxyServer
         {
             using var clientSocket = await _proxySocket.AcceptAsync(stoppingToken);
             var initialBuffer = _bufferHelper.TakeBuffer(32768);
-            var clientHttpMessage =
-                await _bufferHelper.ExecuteReceiveAsync(BufferHelper.ReceiveMethod, clientSocket, initialBuffer,
-                    stoppingToken);
+            var clientHttpMessage = await _bufferHelper.ExecuteReceiveAsync(clientSocket, initialBuffer, stoppingToken);
 
             var serverUrl = ExtractHeader(clientHttpMessage, HttpRequestHeader.Host);
 
@@ -35,18 +33,14 @@ public class TcpProxyServer
             await serverSocket.ConnectAsync(new Endpoint(serverUrl), stoppingToken);
             Log.Debug("Connected to server {ServerIp}", serverSocket.RemoteEndPoint?.ToString());
 
-            await BufferHelper.ExecuteSendAsync(BufferHelper.SendMethod, serverSocket, clientHttpMessage.Buffer, clientHttpMessage.Bytes,
-                stoppingToken);
+            await BufferHelper.ExecuteSendAsync(serverSocket, clientHttpMessage.Buffer, clientHttpMessage.Bytes, stoppingToken);
             Log.Information("Request forwarded to {Server}", serverSocket.RemoteEndPoint?.ToString());
 
-            var serverHttpMessage =
-                await _bufferHelper.ExecuteReceiveAsync(BufferHelper.ReceiveMethod, serverSocket, clientHttpMessage.Buffer,
-                    stoppingToken);
+            var serverHttpMessage = await _bufferHelper.ExecuteReceiveAsync(serverSocket, clientHttpMessage.Buffer, stoppingToken);
             if (configuration.GetMaskImages()) serverHttpMessage = MaskImage(serverHttpMessage);
             Log.Information("Response received from {ServerIp}:\n {Request}", serverSocket.RemoteEndPoint?.ToString(), serverHttpMessage.ToString());
 
-            await BufferHelper.ExecuteSendAsync(BufferHelper.SendMethod, clientSocket, serverHttpMessage.Buffer,
-                serverHttpMessage.Bytes, stoppingToken);
+            await BufferHelper.ExecuteSendAsync(clientSocket, serverHttpMessage.Buffer, serverHttpMessage.Bytes, stoppingToken);
             Log.Information("Response forwarded to client");
 
             Log.Information("Proxying finished, waiting for new request...");
