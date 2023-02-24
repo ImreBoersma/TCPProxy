@@ -10,10 +10,10 @@ public class HttpMessage
         Bytes = bytes;
     }
 
-    public HttpMessage(string message)
+    public HttpMessage(string header, string body)
     {
-        Buffer = Encoding.ASCII.GetBytes(message);
-        Bytes = Buffer.Length;
+        Buffer = Encoding.ASCII.GetBytes(header + "\r\n\r\n" + body);
+        Bytes = body.Length;
     }
 
     public byte[] Buffer { get; }
@@ -24,4 +24,8 @@ public class HttpMessage
     {
         return Encoding.ASCII.GetString(Buffer, 0, Bytes);
     }
+
+    public string GetHeader() => ToString()[..ToString().IndexOf("\r\n\r\n", StringComparison.Ordinal)];
+
+    public string GetBody() => ToString()[(ToString().IndexOf("\r\n\r\n", StringComparison.Ordinal) + 4)..];
 }

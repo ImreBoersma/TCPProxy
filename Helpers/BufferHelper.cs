@@ -13,12 +13,14 @@ public class BufferHelper
     public async ValueTask<HttpMessage> ExecuteReceiveAsync(Socket socket, byte[] buffer, CancellationToken stoppingToken, SocketFlags flags = SocketFlags.None)
     {
         var bytesReceived = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), flags, stoppingToken);
-        _bufferManager.ReturnBuffer(buffer);
         return new HttpMessage(buffer, bytesReceived);
     }
 
-    public static async ValueTask<int> ExecuteSendAsync(Socket socket, byte[] buffer, int count, CancellationToken stoppingToken, int offset = 0) =>
-        await socket.SendAsync(new ArraySegment<byte>(buffer, offset, count), stoppingToken);
+    public async ValueTask<int> ExecuteSendAsync(Socket socket, HttpMessage httpMessage, CancellationToken stoppingToken, int offset = 0)
+    {
+        var bytesReceived = await socket.SendAsync(new ArraySegment<byte>(httpMessage.Buffer, offset, httpMessage.Bytes), stoppingToken);
+        return bytesReceived;
+    }
 
     public byte[] TakeBuffer(int size = 1024) => _bufferManager.TakeBuffer(size);
 }

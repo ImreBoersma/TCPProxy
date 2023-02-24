@@ -22,10 +22,15 @@ public class TcpProxyServer
         while (!stoppingToken.IsCancellationRequested)
         {
             using var clientSocket = await _proxySocket.AcceptAsync(stoppingToken);
-            var initialBuffer = _bufferHelper.TakeBuffer(32768);
+            var initialBuffer = new byte[8192];
             var clientHttpMessage = await _bufferHelper.ExecuteReceiveAsync(clientSocket, initialBuffer, stoppingToken);
 
             var serverUrl = ExtractHeader(clientHttpMessage, HttpRequestHeader.Host);
+            if (string.IsNullOrEmpty(serverUrl))
+            {
+                Log.Warning("No host header found, aborting request");
+                continue;
+            }
 
             Log.Information("Request received from {ClientIp}", clientSocket.RemoteEndPoint?.ToString());
 
@@ -33,14 +38,18 @@ public class TcpProxyServer
             await serverSocket.ConnectAsync(new Endpoint(serverUrl), stoppingToken);
             Log.Debug("Connected to server {ServerIp}", serverSocket.RemoteEndPoint?.ToString());
 
-            await BufferHelper.ExecuteSendAsync(serverSocket, clientHttpMessage.Buffer, clientHttpMessage.Bytes, stoppingToken);
+            await _bufferHelper.ExecuteSendAsync(serverSocket, clientHttpMessage, stoppingToken);
             Log.Information("Request forwarded to {Server}", serverSocket.RemoteEndPoint?.ToString());
 
             var serverHttpMessage = await _bufferHelper.ExecuteReceiveAsync(serverSocket, clientHttpMessage.Buffer, stoppingToken);
-            if (configuration.GetMaskImages()) serverHttpMessage = MaskImage(serverHttpMessage);
-            Log.Information("Response received from {ServerIp}:\n {Request}", serverSocket.RemoteEndPoint?.ToString(), serverHttpMessage.ToString());
 
-            await BufferHelper.ExecuteSendAsync(clientSocket, serverHttpMessage.Buffer, serverHttpMessage.Bytes, stoppingToken);
+            if (configuration.GetMaskImages()) serverHttpMessage = MaskImage(serverHttpMessage);
+            if (configuration.GetIncognito()) serverHttpMessage = Incognito(serverHttpMessage);
+            // if (configuration.GetCache()) serverHttpMessage = Cache(serverHttpMessage);
+
+            Log.Information("Response received from {ServerIp}:\n{Request}", serverSocket.RemoteEndPoint?.ToString(), serverHttpMessage.ToString());
+
+            await _bufferHelper.ExecuteSendAsync(clientSocket, serverHttpMessage, stoppingToken);
             Log.Information("Response forwarded to client");
 
             Log.Information("Proxying finished, waiting for new request...");
