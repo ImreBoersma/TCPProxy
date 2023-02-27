@@ -4,8 +4,9 @@
     <projectFile>TCPProxy.csproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ca4035e-24c1-40be-8b78-d3e2c91c0cfd" name="Changes" comment="Project files">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.TCPProxy.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TCPProxy.dir/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="9ca4035e-24c1-40be-8b78-d3e2c91c0cfd" name="Changes" comment="chore(project files): Adds NuGet cache">
+      <change beforePath="$PROJECT_DIR$/Helpers/RequestHelpers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Helpers/RequestHelpers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Endpoint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Endpoint.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +33,10 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/59fd5efad274879b87777687aee58ca463af03b5272dc50b13cc89df6a4be47/SslStream.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/7c4783383ec96c91b89479ced68cfa1c502a74f4eab14828d47c093ceb481/EndPoint.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/ec11765cbb8c53eff7ee868d6884fa5d48e1b543926061744e7947896e88422/CancellationToken.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/projects/SChool/TCPProxy/Helpers/RequestHelpers.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/projects/SChool/TCPProxy/Helpers/RequestHelpers.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/projects/SChool/TCPProxy/Models/Endpoint.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/projects/SChool/TCPProxy/Models/Endpoint.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -110,7 +115,7 @@
       <workItem from="1676715403280" duration="2252000" />
       <workItem from="1677057935330" duration="277000" />
       <workItem from="1677498167544" duration="117000" />
-      <workItem from="1677498314169" duration="675000" />
+      <workItem from="1677498314169" duration="1667000" />
     </task>
     <task id="LOCAL-00001" summary="Proxy now working">
       <created>1676537195156</created>
@@ -133,7 +138,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677498823832</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="chore(project files): Adds NuGet cache">
+      <created>1677499067167</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1677499067167</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -170,7 +182,8 @@
     <MESSAGE value="Proxy now working" />
     <MESSAGE value="Small refactor" />
     <MESSAGE value="Project files" />
-    <option name="LAST_COMMIT_MESSAGE" value="Project files" />
+    <MESSAGE value="chore(project files): Adds NuGet cache" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore(project files): Adds NuGet cache" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

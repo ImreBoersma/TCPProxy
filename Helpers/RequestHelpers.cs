@@ -35,7 +35,7 @@ public static partial class RequestHelper
 
     public static HttpMessage Incognito(HttpMessage input)
     {
-        var allowedHeaders = new HashSet<string> {"Date", "Server", "Content-Type"};
+        var allowedHeaders = new HashSet<string> { "Date", "Server", "Content-Type" };
 
         var header = new StringBuilder();
 

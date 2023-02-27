@@ -17,7 +17,7 @@ public record Endpoint
                 break;
             case 2:
                 Host = parts[0];
-                Port = ushort.TryParse(parts[1], out var port) ? port : (ushort) 80;
+                Port = ushort.TryParse(parts[1], out var port) ? port : (ushort)80;
                 break;
             default:
                 Log.Warning("Invalid host and port: {HostAndPort}", hostAndPort);
