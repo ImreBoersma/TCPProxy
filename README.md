@@ -1,4 +1,4 @@
-﻿Studentnaam: Imre Boersma
+﻿Student naam: Imre Boersma
 
 Studentnummer: 632546
 
@@ -6,7 +6,7 @@ Studentnummer: 632546
 
 # Algemene beschrijving applicatie
 
-Een proxy is een server die als tussenpersoon guneert tussen een client en een andere server. Deze proxy heeft een aantal extra functionaliteiten:
+Een proxy is een server die als tussenpersoon fungeert tussen een client en een andere server. Deze proxy heeft een aantal extra functionaliteiten:
 
 - De proxy heeft een cache, waardoor de proxy de pagina's opslaat en deze niet opnieuw hoeft te downloaden als de pagina opnieuw wordt aangevraagd.
 - De proxy vervangt alle afbeeldingen op de pagina door een placeholder, zodat de pagina sneller wordt geladen en reclames worden geblokkeerd.
@@ -106,7 +106,7 @@ TCP. UDP verdeelt datagrams niet in verschillende packets. Het houd ook niet bij
 
 #### ICMP
 
-ICMP (Internet Control Message Protocol) is een netwerk protocol die veelal gebruikt wordt door netwerk apparaten om netwerk communicatie fouten te diagnoseren. Het wordt meest
+ICMP (Internet Control Message Protocol) is een netwerk protocol die veelal gebruikt wordt door netwerk apparaten om netwerk communicatie fouten te diagnosticeren. Het wordt meest
 gebruikt om na te gaan of data goed aankomt bij de bestemming maar kan ook gebruikt worden in DDoS aanvallen.
 
 (What is the Internet Control Message Protocol (ICMP)?, z.d.)
@@ -128,12 +128,12 @@ van de response. De headers zijn de metadata van het bericht. De body is de data
 ### Hoe wordt de content in een HTTP bericht verpakt?
 
 Er zijn verschillende manieren waarop de inhoud kan worden verpakt, afhankelijk van het type inhoud en het gebruikte protocol. Bijvoorbeeld, tekstuele inhoud kan worden verzonden
-in de vorm van plain text of in een geëncodeerde vorm zoals JSON of XML. Binary inhoud zoals afbeeldingen of video's worden gewoonlijk verzonden in de originele binair formaat.
+in de vorm van plain text of in een encoded vorm zoals JSON of XML. Binary inhoud zoals afbeeldingen of video's worden gewoonlijk verzonden in de originele binair formaat.
 
 ### Streaming content
 
 Streaming content is het continu afspelen van audio of video via internet, zonder dat de gehele inhoud eerst moet worden gedownload. Dit wordt bereikt door het verzenden van kleine
-stukjes van de inhoud (pakketten) via TCP. De ontvanger bufferd deze pakketten en speelt ze af terwijl nieuwe pakketten worden ontvangen op de achtergrond. Er is een variabele
+stukjes van de inhoud (pakketten) via TCP. De ontvanger buffered deze pakketten en speelt ze af terwijl nieuwe pakketten worden ontvangen op de achtergrond. Er is een variabele
 buffergrootte waarmee de inhoud kan worden afgespeeld zonder onderbrekingen, ook als de bandbreedte varieert of als er vertragingen zijn in het netwerk.
 
 ## Reflectie
@@ -143,6 +143,8 @@ buffergrootte waarmee de inhoud kan worden afgespeeld zonder onderbrekingen, ook
 ### Feedback over opdracht
 
 # Test cases
+
+
 
 ## case naam
 

@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPProxy", "TCPProxy\TCPProxy.csproj", "{7E4642C3-036E-453E-A0F7-E4F535555970}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPProxyTest", "TCPProxyTest\TCPProxyTest.csproj", "{2EB81B09-AFCA-49C6-B46A-4840B197225A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7E4642C3-036E-453E-A0F7-E4F535555970}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E4642C3-036E-453E-A0F7-E4F535555970}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E4642C3-036E-453E-A0F7-E4F535555970}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E4642C3-036E-453E-A0F7-E4F535555970}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EB81B09-AFCA-49C6-B46A-4840B197225A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EB81B09-AFCA-49C6-B46A-4840B197225A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EB81B09-AFCA-49C6-B46A-4840B197225A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EB81B09-AFCA-49C6-B46A-4840B197225A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
