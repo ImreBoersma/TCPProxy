@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="CliFx" Version="2.3.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
     <PackageReference Include="System.ServiceModel.Primitives" Version="4.10.0" />

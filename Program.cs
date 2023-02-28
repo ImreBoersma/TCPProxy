@@ -1,4 +1,5 @@
 ﻿using CliFx;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using TCPProxy.Commands;
@@ -14,6 +15,7 @@ var services = new ServiceCollection();
 services.AddSingleton<TcpProxyServer>();
 
 services.AddTransient<StartCommand>();
+
 
 var serviceProvider = services.BuildServiceProvider();
 

@@ -10,13 +10,13 @@ public class BufferHelper
 
     public BufferHelper(int mtu) => _bufferManager = BufferManager.CreateBufferManager(100, mtu);
 
-    public async ValueTask<HttpMessage> ExecuteReceiveAsync(Socket socket, byte[] buffer, CancellationToken stoppingToken, SocketFlags flags = SocketFlags.None)
+    public static async ValueTask<HttpMessage> ExecuteReceiveAsync(Socket socket, byte[] buffer, CancellationToken stoppingToken, SocketFlags flags = SocketFlags.None)
     {
         var bytesReceived = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), flags, stoppingToken);
         return new HttpMessage(buffer, bytesReceived);
     }
 
-    public async ValueTask<int> ExecuteSendAsync(Socket socket, HttpMessage httpMessage, CancellationToken stoppingToken, int offset = 0)
+    public static async ValueTask<int> ExecuteSendAsync(Socket socket, HttpMessage httpMessage, CancellationToken stoppingToken, int offset = 0)
     {
         var bytesReceived = await socket.SendAsync(new ArraySegment<byte>(httpMessage.Buffer, offset, httpMessage.Bytes), stoppingToken);
         return bytesReceived;

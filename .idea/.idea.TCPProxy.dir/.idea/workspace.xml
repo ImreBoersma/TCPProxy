@@ -4,9 +4,14 @@
     <projectFile>TCPProxy.csproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ca4035e-24c1-40be-8b78-d3e2c91c0cfd" name="Changes" comment="chore(project files): Adds NuGet cache">
+    <list default="true" id="9ca4035e-24c1-40be-8b78-d3e2c91c0cfd" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Helpers/CacheHelper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.TCPProxy.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TCPProxy.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Helpers/BufferHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Helpers/BufferHelper.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Helpers/RequestHelpers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Helpers/RequestHelpers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Endpoint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Endpoint.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Providers/TcpProxyServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Providers/TcpProxyServer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TCPProxy.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/TCPProxy.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,15 +33,18 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/db310c5d5c6544598a4154960382b14016ba8/8c/a2ba7c6e/BufferManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/137bf7176cc8c247ebbf474f32ea63bb407b875c5866e94c534829f893/CommandAttribute.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/15dc23f1d4f2cea44963bb63bc144b9e3e14983614da399c4ff84348c9b1e6c/IPAddress.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/2befa62c21c14a918916e4a7d9e1ce75b1c8a8/_231dd/IEnumerable.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/59fd5efad274879b87777687aee58ca463af03b5272dc50b13cc89df6a4be47/SslStream.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/7c4783383ec96c91b89479ced68cfa1c502a74f4eab14828d47c093ceb481/EndPoint.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/20d42a8599e7919ec592dfb92acb12a9d1fc1f8b3eebd494239d2add2fbe9c/HttpHeaders.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/5272659a3a2ed3fc52b8447da96ffb91e6e446a6866325e2c11618292039d/ICommand.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/708a26c47191eec2b9ceac9cebb515b1f943ac7f66499fa867496a63a4ae/Socket.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8e32bbd14d97b05bfd3870ffcbe3a2dbb67c59c44f0b547a2247bdef3bbfb9/HeaderDescriptor.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9a7fcb3e577494cf37e52ae09d8a64c9adc6cb2160d039b716a1d64158152f38/CliApplicationBuilder.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d43fa890c7fc70c8ba3d3d33ee567045a39b9710f73b3ced707d8ab62d83/Console.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/ec11765cbb8c53eff7ee868d6884fa5d48e1b543926061744e7947896e88422/CancellationToken.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/projects/SChool/TCPProxy/Helpers/RequestHelpers.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/projects/SChool/TCPProxy/Helpers/RequestHelpers.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/projects/SChool/TCPProxy/Models/Endpoint.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/projects/SChool/TCPProxy/Models/Endpoint.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/efaa7de985ac72768591fcc5269db133ade6e7f16d0c473c054ed9d6b32cd/UInt16.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/imreb/RiderProjects/TCPProxy/Helpers/BufferHelper.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/imreb/RiderProjects/TCPProxy/Helpers/BufferHelper.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />

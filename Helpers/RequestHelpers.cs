@@ -35,7 +35,7 @@ public static partial class RequestHelper
 
     public static HttpMessage Incognito(HttpMessage input)
     {
-        var allowedHeaders = new HashSet<string> { "Date", "Server", "Content-Type" };
+        var allowedHeaders = new HashSet<string> {"Date", "Server", "Content-Type"};
 
         var header = new StringBuilder();
 
@@ -52,6 +52,16 @@ public static partial class RequestHelper
 
         return new HttpMessage(header.ToString(), input.GetBody());
     }
+
+    public static HttpMessage Cache(HttpMessage input)
+    {
+        var id = ExtractHeader(input, HttpRequestHeader.Host);
+        if (id is not null)
+        {
+            string? cachedValue = CacheHelper.Get(id);
+        }
+    }
+
 
     [GeneratedRegex("(?<=src=\")([^\\\"']+(jpe?g|png|gif|bmp))", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-GB")]
     private static partial Regex SourceRegex();
