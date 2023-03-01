@@ -24,37 +24,84 @@ public class TcpProxyServer
             using var clientSocket = await _proxySocket.AcceptAsync(stoppingToken);
             var clientHttpMessage = await _bufferHelper.ExecuteReceiveAsync(clientSocket, stoppingToken);
 
-            var serverUrl = ExtractHeader(clientHttpMessage, HttpRequestHeader.Host);
-            if (string.IsNullOrEmpty(serverUrl))
-            {
-                Log.Warning("No host header found, aborting request");
-                continue;
-            }
+            if (!TryExtractServerEndpoint(clientHttpMessage, out var serverEndpoint)) continue;
 
             Log.Information("Request received from {ClientIp}", clientSocket.RemoteEndPoint?.ToString());
 
-            var serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint serverEndpoint = new Endpoint(serverUrl);
-            await serverSocket.ConnectAsync(serverEndpoint, stoppingToken);
-            Log.Debug("Connected to server {ServerIp}", serverSocket.RemoteEndPoint?.ToString());
+            using var serverSocket = await ConnectToServerAsync(serverEndpoint, stoppingToken);
+            await ForwardRequestToServerAsync(serverSocket, clientHttpMessage, stoppingToken);
 
-            await _bufferHelper.ExecuteSendAsync(serverSocket, clientHttpMessage, stoppingToken);
-            Log.Information("Request forwarded to {Server}", serverSocket.RemoteEndPoint?.ToString());
-
-            var serverHttpMessage = await _bufferHelper.ExecuteReceiveAsync(serverSocket, stoppingToken, SocketFlags.None, clientHttpMessage.Buffer);
-
-            if (configuration.GetMaskImages()) serverHttpMessage = MaskImage(serverHttpMessage);
-            if (configuration.GetIncognito()) serverHttpMessage = Incognito(serverHttpMessage);
-            if (configuration.GetCache()) serverHttpMessage = Cache(serverHttpMessage);
+            var serverHttpMessage = await ReceiveResponseFromServerAsync(serverSocket, clientHttpMessage.Buffer, stoppingToken);
+            serverHttpMessage = ProcessResponse(serverHttpMessage, configuration);
 
             Log.Information("Response received from {ServerIp}:\n{Request}", serverSocket.RemoteEndPoint?.ToString(), serverHttpMessage.ToString());
 
-            await _bufferHelper.ExecuteSendAsync(clientSocket, serverHttpMessage, stoppingToken);
-            Log.Information("Response forwarded to client");
+            await ForwardResponseToClientAsync(clientSocket, serverHttpMessage, stoppingToken);
 
             Log.Information("Proxying finished, waiting for new request...");
         }
 
         return Task.CompletedTask;
+    }
+
+    public static HttpMessage ProcessResponse(HttpMessage responseMessage, ProxyConfigurationModel configuration)
+    {
+        var processedMessage = responseMessage;
+
+        if (configuration.GetMaskImages())
+        {
+            processedMessage = MaskImage(responseMessage);
+        }
+
+        if (configuration.GetIncognito())
+        {
+            processedMessage = Incognito(responseMessage);
+        }
+
+        if (configuration.GetCache())
+        {
+            processedMessage = Cache(responseMessage);
+        }
+
+        return processedMessage;
+    }
+
+    public static bool TryExtractServerEndpoint(HttpMessage message, out IPEndPoint endpoint)
+    {
+        var serverUrl = ExtractHeader(message, HttpRequestHeader.Host);
+        if (string.IsNullOrEmpty(serverUrl))
+        {
+            Log.Warning("No host header found, aborting request");
+            endpoint = new IPEndPoint(IPAddress.Any, 0);
+            return false;
+        }
+
+        endpoint = new Endpoint(serverUrl);
+        return true;
+    }
+
+    private static async ValueTask<Socket> ConnectToServerAsync(IPEndPoint endpoint, CancellationToken stoppingToken)
+    {
+        var serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        await serverSocket.ConnectAsync(endpoint, stoppingToken);
+        Log.Debug("Connected to server {ServerIp}", serverSocket.RemoteEndPoint?.ToString());
+        return serverSocket;
+    }
+
+    private async Task ForwardRequestToServerAsync(Socket serverSocket, HttpMessage requestMessage, CancellationToken stoppingToken)
+    {
+        await _bufferHelper.ExecuteSendAsync(serverSocket, requestMessage, stoppingToken);
+        Log.Information("Forward request to {Server}", serverSocket.RemoteEndPoint?.ToString());
+    }
+
+    private async Task<HttpMessage> ReceiveResponseFromServerAsync(Socket serverSocket, byte[] clientBuffer, CancellationToken stoppingToken)
+    {
+        return await _bufferHelper.ExecuteReceiveAsync(serverSocket, stoppingToken, SocketFlags.None, clientBuffer);
+    }
+
+    private async Task ForwardResponseToClientAsync(Socket clientSocket, HttpMessage responseMessage, CancellationToken stoppingToken)
+    {
+        await _bufferHelper.ExecuteSendAsync(clientSocket, responseMessage, stoppingToken);
+        Log.Information("Response forwarded to client");
     }
 }

@@ -3,9 +3,9 @@ using System.Text;
 using TCPProxy.Helpers;
 using TCPProxy.Models;
 
-namespace TCPProxyTest;
+namespace TCPProxyTest.Helpers;
 
-public class UnitTest1
+public class RequestHelpertests
 {
     [Fact]
     public void ExtractHeader_ReturnsNullWhenSearchHeaderNotFound()
@@ -26,7 +26,7 @@ public class UnitTest1
     {
         // Arrange
         var httpMessage = new HttpMessage("GET / HTTP/1.1\r\nHost: www.example.com\r\n\r\n");
-        const HttpRequestHeader searchHeader = (HttpRequestHeader)999;
+        const HttpRequestHeader searchHeader = (HttpRequestHeader) 999;
 
         // Act
         var result = RequestHelper.ExtractHeader(httpMessage, searchHeader);
@@ -61,7 +61,7 @@ public class UnitTest1
         var result = RequestHelper.MaskImage(httpMessage);
 
         // Assert
-        Assert.Equal(expected, result);
+        Assert.Equal(expected.ToString(), result.ToString());
     }
 
     [Fact]
@@ -89,7 +89,7 @@ public class UnitTest1
         var result = RequestHelper.Incognito(httpMessage);
 
         // Assert
-        Assert.Equal(expectedHeader + "<h1>Hello</h1>", result.ToString());
+        Assert.Equal(new HttpMessage(expectedHeader, "<h1>Hello</h1>").ToString(), result.ToString());
     }
 
     [Fact]

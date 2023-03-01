@@ -1,5 +1,4 @@
 ﻿using CliFx;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using TCPProxy.Commands;

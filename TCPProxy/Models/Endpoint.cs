@@ -6,28 +6,46 @@ namespace TCPProxy.Models;
 
 public record Endpoint
 {
-    public Endpoint(string hostAndPort)
+    public Endpoint(string addressString, ushort port = 80)
     {
-        if (string.IsNullOrWhiteSpace(hostAndPort))
+        IPAddress? address = null;
+
+        if (!string.IsNullOrWhiteSpace(addressString))
         {
-            Log.Warning("Host and port is null or empty");
-            Host = "localhost";
-            Port = 80;
+            var splitAddress = addressString;
+            if (addressString.Contains(':'))
+            {
+                splitAddress = addressString.Split(':')[0];
+            }
+
+            if (!IPAddress.TryParse(splitAddress, out address))
+            {
+                try
+                {
+                    var addresses = Dns.GetHostAddresses(splitAddress);
+                    address = addresses.FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
+                }
+                catch (SocketException e)
+                {
+                    Log.Error(e, "Failed to resolve host {Host}", splitAddress);
+                    return;
+                }
+            }
         }
 
-        var split = hostAndPort.Split(':');
-        Host = split[0];
-        Port = split.Length == 2 ? ushort.Parse(split[1]) : (ushort)80;
-    }
+        if (address == null)
+        {
+            Log.Warning("Invalid address, defaulting to localhost:{Port}", port);
+            Port = port;
+            return;
+        }
 
-    public Endpoint(IPAddress address, ushort port = 8080)
-    {
-        Host = address.ToString();
+        Host = address;
         Port = port;
     }
 
-    public string Host { get; }
-    public ushort Port { get; }
+    public IPAddress Host { get; } = new(new byte[] {127, 0, 0, 1});
+    public ushort Port { get; } = 80;
 
     public override string ToString()
     {
@@ -58,6 +76,6 @@ public record Endpoint
             Log.Debug("{Index}: {Address}", index, address.ToString());
         }
 
-        return new IPEndPoint(IPAddress.Loopback, 8080);
+        return new IPEndPoint(IPAddress.Loopback, 80);
     }
 }

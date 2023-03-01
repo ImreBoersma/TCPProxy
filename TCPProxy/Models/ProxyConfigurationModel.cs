@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace TCPProxy.Models;
+﻿namespace TCPProxy.Models;
 
 public record ProxyConfigurationModel
 {
@@ -9,7 +7,7 @@ public record ProxyConfigurationModel
     private bool Incognito { get; }
     private ushort Port { get; } = 8080;
 
-    public ProxyConfigurationModel(bool cache, bool maskImages, bool incognito, ushort port)
+    public ProxyConfigurationModel(bool cache, bool maskImages, bool incognito, ushort port = 8080)
     {
         Cache = cache;
         MaskImages = maskImages;
