@@ -14,7 +14,123 @@ Een proxy is een server die als tussenpersoon fungeert tussen een client en een 
 
 ## Ontwerp en bouw van de applicatie
 
-_Teken een diagram en licht de onderdelen toe._
+De applicatie is gebouwd met behulp van CliFX. CliFX is een framework dat is gebaseerd op JavaFX. CliFX is een wrapper om JavaFX die het makkelijker maakt om CLI applicaties te
+maken. De applicatie is opgebouwd uit een aantal verschillende classes. Hieronder staan de belangrijkste classes weergegeven:
+
+```mermaid
+classDiagram
+    IBufferHelper <|-- BufferHelper
+
+    TcpProxyServer <.. HttpMessage
+    TcpProxyServer <.. ProxyConfigurationModel
+    StartCommand <.. ProxyConfigurationModel
+    BufferHelper <.. HttpMessage
+    IBufferHelper <.. HttpMessage
+    RequestHelper <.. HttpMessage
+
+    CacheHelper --> "1" RequestHelper
+    TcpProxyServer --> Endpoint
+    TcpProxyServer --> "1" RequestHelper
+    TcpProxyServer --> "1" IBufferHelper
+
+    class TcpProxyServer {
+        - Socket: _proxySocket
+        - BufferHelper: _bufferHelp
+        - ProcessResponse(HttpMessage responseMessage, ProxyConfigurationModel config) HttpMessage
+        - TryExtractServerEndpoint(HttpMessage message, out IPEndPoint endpoint) bool
+        - ConnectToServerAsync(IPEndPoint endpoint, CancellationToken cancellationToken) ValueTask<Socket>
+        - ForwardRequestToServerAsync(Socket serverSocket, HttpMessage requestMessage, CancellationToken cancellationToken) Task
+        - ReceiveResponseFromServerAsync(Socket serverSocket, byte[] clientBuffer, CancellationToken cancellationToken) Task<HttpMessage>
+        - ForwardResponseToClientAsync(Socket clientSocket, HttpMessage responseMessage, CancellationToken cancellationToken) Task
+    }
+
+    class ProxyConfigurationModel {
+        - bool: Cache
+        - bool: MaskImage
+        - bool: Incognito
+        - int: Buffer
+        - ushort: port
+        + GetCache() bool
+        + GetMaskImage() bool
+        + GetIncognito() bool
+        + GetBuffer() int
+        + GetPort() ushort
+        + PrintConfig() void
+    }
+
+    class HttpMessage {
+        + byte[]: Buffer
+        + int: Bytes
+        + HttpMessage(String header, String body)
+        + HttpMessage(String message)
+        + HttpMessage(Byte[] buffer, int bytes)
+        + GetHeader() String
+        + GetBody() String
+    }
+
+    class IBufferHelper
+    <<Interface>> IBufferHelper
+    IBufferHelper: + ExecuteSendAsync(Socket socket, HttpMessage httpMessage, CancellationToken cancellationToken, int offset = 0) ValueTask<int>
+    IBufferHelper: + ExecuteReceiveAsync(Socket socket, CancellationToken stoppingToken, SocketFlags flags = SocketFlags.None, byte[]? buffer = null) ValueTask<HttpMessage>
+    IBufferHelper: + TakeBuffer(int size = 1024) Byte[]
+    IBufferHelper: + SetBufferSize(int size) void
+
+    class BufferHelper {
+        - BufferManager: _bufferManager
+        - int: _maxBufferSize
+    }
+
+    class StartCommand {
+        + bool Cache
+        + bool MaskImage
+        + bool Incognito
+        + int Buffer
+        + ushort Port
+    }
+
+    class CacheHelper {
+        - MemoryCache: _cache
+        + Get<T>(String key) T?
+        + Add(String key, Object value, int seconds = 3000) void
+        + Remove(String key) void
+    }
+    class RequestHelper {
+        + ExtractHeader(HttpMessage httpMessage, HttpRequestHeader searchHeader) string?
+        + MaskImage(HttpMessage input) HttpMessage
+        + Incognito(HttpMessage input) HttpMessage
+        + Cache(HttpMessage input) HttpMessage
+        - SourceRegex() Regex
+        - ContentLengthRegex() Regex
+    }
+    class Endpoint {
+        + Endpoint(String address, ushort port = 80) Endpoint
+        + IPAddress: Host
+        + ushort: Port
+    }
+```
+
+## Gebruik van de applicatie
+
+De applicatie kan worden gestart met de volgende commando's:
+
+Zorg ervoor dat de applicatie is gebouwd.
+Navigeer naar `\bin\Debug\net7.0` en vind de TCPProxy.exe voer het volgende commando uit:
+
+```bash
+  TCPProxy.exe
+```
+
+De applicatie geeft een lijst met commando's weer. Om de applicatie te starten voer je het volgende commando uit:
+
+```bash
+  TCPProxy.exe start
+```
+
+De applicatie geeft een lijst met opties weer. Om de applicatie te starten met de opties `cache`, `maskImage` en `incognito` voer je het volgende commando uit:
+
+```bash
+  TCPProxy.exe start --cache --maskImage --incognito
+```
 
 ## HTTP request en response
 
@@ -140,17 +256,84 @@ buffergrootte waarmee de inhoud kan worden afgespeeld zonder onderbrekingen, ook
 
 ### Wat kan er beter?
 
+Ik heb veel tijd besteedn aan steeds opnieuw de code te refactoren. Ik heb hierdoor veel tijd verloren. Ik had beter kunnen focussen op het implementeren van de functionaliteit en
+de code later kunnen refactoren.
+
+Ook had ik beter kunnen nadenken over de structuur van de code. Ik had beter kunnen nadenken over de verschillende klassen en hoe deze met elkaar in verbinding staan.
+
 ### Feedback over opdracht
+
+De opdracht was goed te doen. Ik denk dat het wel beter zou zijn als er wat meer uitleg was over de verschillende onderdelen van de opdracht. Ik had bijvoorbeeld niet geweten hoe
+ik caching moest implementeren als ik dit niet al eens eerder had gedaan.
 
 # Test cases
 
+## case Normale GET request
 
+### case beschrijving
 
-## case naam
+De client stuurt een GET request naar de server. De server stuurt een response terug met een status code van 200.
 
-## case handleiding
+### case handleiding
+
+1. Start de TCP server
+2. Start een HTTP client
+3. Voer een GET request uit naar de server
+4. Controleer of de server een response terug stuurt met een status code van 200
 
 ## case verwacht resultaat
+
+De server stuurt een response terug met een status code van 200.
+
+## case GET request met maskImage optie
+
+### case beschrijving
+
+De client stuurt een GET request naar de server met de maskImage optie. De server stuurt een response terug met een status code van 200. De response body bevat een afbeelding.
+
+### case handleiding
+
+1. Start de TCP server met de maskImage optie
+2. Start een HTTP client
+3. Voer een GET request uit naar een website met een afbeelding
+4. Controleer of de server een response terug stuurt met een status code van 200
+5. Controleer of de response body de afbeelding bevat
+6. Controleer of de afbeelding is gemaskeerd
+
+## case verwacht resultaat
+
+De server stuurt een response terug met een status code van 200. De response body bevat een afbeelding. De afbeelding is gemaskeerd.
+
+## case GET request met incognito optie
+
+### case beschrijving
+
+De client stuurt een GET request naar de server met de incognito optie. De server stuurt een response terug met een status code van 200. De response header bevat geen andere
+headers dan de volgende headers:
+
+- Content-Type
+- Server
+- Date
+
+### case handleiding
+
+1. Start de TCP server met de incognito optie
+2. Start een HTTP client
+3. Voer een GET request uit naar een website
+4. Controleer of de server een response terug stuurt met een status code van 200
+5. Controleer of de response header de volgende headers bevat:
+    - Content-Type
+    - Server
+    - Date
+6. Controleer of de response header geen andere headers bevat
+
+## case verwacht resultaat
+
+De server stuurt een response terug met een status code van 200. De response header bevat de volgende headers:
+
+- Content-Type
+- Server
+- Date
 
 # Bronnen
 
