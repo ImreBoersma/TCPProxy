@@ -15,7 +15,7 @@ namespace TCPProxy.Commands;
 [Command(name: "start", Description = "Starts the proxy")]
 public class StartCommand : ICommand
 {
-    private readonly TcpProxyServer _tcpProxyServer;
+    private readonly ITcpProxyServer _tcpProxyServer;
 
     [CommandOption("cache", 'c', Description = "Enable cache")]
     public bool Cache { get; init; } = false;
@@ -30,14 +30,17 @@ public class StartCommand : ICommand
     [CommandOption("port", 'p', Description = "Port to listen on")]
     public ushort Port { get; init; } = 8080;
 
-    public StartCommand(TcpProxyServer tcpProxyServer)
+    [CommandOption("buffer", 'b', Description = "Buffer size in bytes")]
+    public int BufferSize { get; init; } = 1024;
+
+    public StartCommand(ITcpProxyServer tcpProxyServer)
     {
         _tcpProxyServer = tcpProxyServer;
     }
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
-        var options = new ProxyConfigurationModel(Cache, MaskImages, Incognito, Port);
+        var options = new ProxyConfigurationModel(Cache, MaskImages, Incognito, BufferSize, Port);
         await _tcpProxyServer.StartProxy(options, new CancellationToken(false));
     }
 }

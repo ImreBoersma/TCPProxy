@@ -48,7 +48,7 @@ public class EndpointTests
 
         // Assert
         Assert.Equal(IPAddress.Loopback, endpoint.Host);
-        Assert.Equal((ushort) 80, endpoint.Port);
+        Assert.Equal((ushort)80, endpoint.Port);
     }
 
     [Fact]
@@ -61,7 +61,7 @@ public class EndpointTests
 
         // Assert
         Assert.Equal(IPAddress.Loopback, endpoint.Host);
-        Assert.Equal((ushort) 80, endpoint.Port);
+        Assert.Equal((ushort)80, endpoint.Port);
     }
 
     [Theory]
@@ -90,7 +90,7 @@ public class EndpointTests
 
         // Assert
         Assert.Equal(IPAddress.Loopback, endpoint.Host);
-        Assert.Equal((ushort) 80, endpoint.Port);
+        Assert.Equal((ushort)80, endpoint.Port);
     }
 
     [Fact]
@@ -100,7 +100,7 @@ public class EndpointTests
         var endpoint = new Endpoint("127.0.0.1", 8080);
 
         // Act
-        var ipEndPoint = (IPEndPoint) endpoint;
+        var ipEndPoint = (IPEndPoint)endpoint;
 
         // Assert
         Assert.Equal(endpoint.Host, ipEndPoint.Address);
@@ -110,14 +110,14 @@ public class EndpointTests
     [Theory]
     [InlineData("localhost", 80)]
     [InlineData("127.0.0.1", 8080)]
-    [InlineData("10.0.0.1", 80)]
+    [InlineData("216.239.32.8", 80)]
     public void ImplicitOperator_ConvertsToEndPoint(string host, ushort port)
     {
         // Arrange
         var endpoint = new Endpoint(host, port);
 
         // Act
-        var ipEndPoint = (IPEndPoint) endpoint;
+        var ipEndPoint = (IPEndPoint)endpoint;
 
         // Assert
         Assert.NotNull(ipEndPoint);
@@ -132,7 +132,7 @@ public class EndpointTests
         var endpoint = new Endpoint("invalid-host-name");
 
         // Act
-        var ipEndPoint = (IPEndPoint) endpoint;
+        var ipEndPoint = (IPEndPoint)endpoint;
 
         // Assert
         Assert.NotNull(ipEndPoint);

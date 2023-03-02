@@ -7,36 +7,37 @@ using static TCPProxy.Helpers.RequestHelper;
 
 namespace TCPProxy.Providers;
 
-public class TcpProxyServer
+public class TcpProxyServer : ITcpProxyServer
 {
     private readonly Socket _proxySocket = new(IPAddress.Any.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
     private readonly BufferHelper _bufferHelper = new();
 
-    public async ValueTask<Task?> StartProxy(ProxyConfigurationModel configuration, CancellationToken stoppingToken)
+    public async ValueTask<Task?> StartProxy(ProxyConfigurationModel configuration, CancellationToken cancellationToken)
     {
         Log.Information("Starting proxy...");
+        _bufferHelper.SetBufferSize(configuration.GetBuffer());
         _proxySocket.Bind(new IPEndPoint(IPAddress.Any, configuration.GetPort()));
         _proxySocket.Listen();
         DebugHelper.PrintConfiguration(configuration);
 
-        while (!stoppingToken.IsCancellationRequested)
+        while (!cancellationToken.IsCancellationRequested)
         {
-            using var clientSocket = await _proxySocket.AcceptAsync(stoppingToken);
-            var clientHttpMessage = await _bufferHelper.ExecuteReceiveAsync(clientSocket, stoppingToken);
+            using var clientSocket = await _proxySocket.AcceptAsync(cancellationToken);
+            var clientHttpMessage = await _bufferHelper.ExecuteReceiveAsync(clientSocket, cancellationToken);
 
             if (!TryExtractServerEndpoint(clientHttpMessage, out var serverEndpoint)) continue;
 
             Log.Information("Request received from {ClientIp}", clientSocket.RemoteEndPoint?.ToString());
 
-            using var serverSocket = await ConnectToServerAsync(serverEndpoint, stoppingToken);
-            await ForwardRequestToServerAsync(serverSocket, clientHttpMessage, stoppingToken);
+            using var serverSocket = await ConnectToServerAsync(serverEndpoint, cancellationToken);
+            await ForwardRequestToServerAsync(serverSocket, clientHttpMessage, cancellationToken);
 
-            var serverHttpMessage = await ReceiveResponseFromServerAsync(serverSocket, clientHttpMessage.Buffer, stoppingToken);
+            var serverHttpMessage = await ReceiveResponseFromServerAsync(serverSocket, clientHttpMessage.Buffer, cancellationToken);
             serverHttpMessage = ProcessResponse(serverHttpMessage, configuration);
 
             Log.Information("Response received from {ServerIp}:\n{Request}", serverSocket.RemoteEndPoint?.ToString(), serverHttpMessage.ToString());
 
-            await ForwardResponseToClientAsync(clientSocket, serverHttpMessage, stoppingToken);
+            await ForwardResponseToClientAsync(clientSocket, serverHttpMessage, cancellationToken);
 
             Log.Information("Proxying finished, waiting for new request...");
         }
@@ -80,7 +81,7 @@ public class TcpProxyServer
         return true;
     }
 
-    private static async ValueTask<Socket> ConnectToServerAsync(IPEndPoint endpoint, CancellationToken stoppingToken)
+    public static async ValueTask<Socket> ConnectToServerAsync(IPEndPoint endpoint, CancellationToken stoppingToken)
     {
         var serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         await serverSocket.ConnectAsync(endpoint, stoppingToken);

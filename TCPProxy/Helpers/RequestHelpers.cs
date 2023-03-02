@@ -83,7 +83,9 @@ public abstract partial class RequestHelper
 
         var id = ExtractHeader(input, HttpRequestHeader.Host);
         if (id is not null)
+        {
             return cacheHelper.Get<HttpMessage>(id) is not null ? cacheHelper.Get<HttpMessage>(id)! : input;
+        }
 
         return input;
     }

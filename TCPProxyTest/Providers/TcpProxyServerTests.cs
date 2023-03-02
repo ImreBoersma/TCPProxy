@@ -1,4 +1,7 @@
 ﻿using System.Net;
+using System.Net.Sockets;
+using Moq;
+using TCPProxy.Helpers;
 using TCPProxy.Models;
 using TCPProxy.Providers;
 
@@ -100,5 +103,32 @@ public class TcpProxyServerTests
         Assert.True(result);
         Assert.Equal(IPAddress.Parse("127.0.0.1"), endpoint.Address);
         Assert.Equal(80, endpoint.Port);
+    }
+
+    private readonly Mock<IBufferHelper> _bufferHelperMock;
+
+    public TcpProxyServerTests()
+    {
+        _bufferHelperMock = new Mock<IBufferHelper>();
+    }
+
+    [Fact]
+    public async Task ConnectToServerAsync_ShouldCreateSocketAndConnectToServer()
+    {
+        // Arrange
+        var endpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 80);
+        var cancellationToken = new CancellationToken(false);
+
+        var expectedSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        await expectedSocket.ConnectAsync(endpoint, cancellationToken);
+
+        var buffer = new byte[1024];
+        _bufferHelperMock.Setup(x => x.TakeBuffer(It.IsAny<int>())).Returns(buffer);
+
+        // Act
+        var actualSocket = await TcpProxyServer.ConnectToServerAsync(endpoint, cancellationToken);
+
+        // Assert
+        Assert.Equal(expectedSocket.RemoteEndPoint?.ToString(), actualSocket.RemoteEndPoint?.ToString());
     }
 }

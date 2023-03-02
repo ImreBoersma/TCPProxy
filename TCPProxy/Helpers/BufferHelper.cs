@@ -4,15 +4,16 @@ using TCPProxy.Models;
 
 namespace TCPProxy.Helpers;
 
-public class BufferHelper
+public class BufferHelper : IBufferHelper
 {
     private readonly BufferManager _bufferManager;
+    private int _maxBufferSize = 8192;
 
-    public BufferHelper(int mtu = 8192) => _bufferManager = BufferManager.CreateBufferManager(100, mtu);
+    public BufferHelper(int mtu = default) => _bufferManager = BufferManager.CreateBufferManager(100, mtu <= _maxBufferSize ? mtu : _maxBufferSize);
 
     public async ValueTask<HttpMessage> ExecuteReceiveAsync(Socket socket, CancellationToken stoppingToken, SocketFlags flags = SocketFlags.None, byte[]? buffer = null)
     {
-        buffer ??= _bufferManager.TakeBuffer(8192);
+        buffer ??= _bufferManager.TakeBuffer(_maxBufferSize);
         var buff = _bufferManager.TakeBuffer(buffer.Length);
 
         try
@@ -41,4 +42,5 @@ public class BufferHelper
     }
 
     public byte[] TakeBuffer(int size = 1024) => _bufferManager.TakeBuffer(size);
+    public void SetBufferSize(int size) => _maxBufferSize = size;
 }

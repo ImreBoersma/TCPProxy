@@ -44,7 +44,7 @@ public record Endpoint
         Port = port;
     }
 
-    public IPAddress Host { get; } = new(new byte[] {127, 0, 0, 1});
+    public IPAddress Host { get; } = new(new byte[] { 127, 0, 0, 1 });
     public ushort Port { get; } = 80;
 
     public override string ToString()
@@ -74,8 +74,9 @@ public record Endpoint
         foreach (var (address, index) in ipAddresses.Select((v, i) => (v, i)))
         {
             Log.Debug("{Index}: {Address}", index, address.ToString());
+            return new IPEndPoint(address, endpoint.Port);
         }
 
-        return new IPEndPoint(IPAddress.Loopback, 80);
+        return new IPEndPoint(IPAddress.Loopback, endpoint.Port);
     }
 }

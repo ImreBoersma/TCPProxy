@@ -10,7 +10,8 @@ public class CacheHelper
     {
         _cache = new MemoryCache(new MemoryCacheOptions());
     }
-    public void Add(string key, object value, int seconds)
+
+    public void Add(string key, object value, int seconds = 3600)
     {
         _cache.Set(key, value, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(seconds)));
     }
