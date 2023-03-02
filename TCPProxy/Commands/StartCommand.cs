@@ -38,6 +38,10 @@ public class StartCommand : ICommand
         _tcpProxyServer = tcpProxyServer;
     }
 
+    /// <summary>
+    ///    Executes the command.
+    /// </summary>
+    /// <param name="console">Console to use for input/output.</param>
     public async ValueTask ExecuteAsync(IConsole console)
     {
         var options = new ProxyConfigurationModel(Cache, MaskImages, Incognito, BufferSize, Port);

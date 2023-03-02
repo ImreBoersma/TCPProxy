@@ -52,6 +52,11 @@ public record Endpoint
         return $"{Host}:{Port}";
     }
 
+    /// <summary>
+    /// Implicitly convert an Endpoint to an IPEndPoint. This is used to convert the endpoint to an address that can be used to connect to.
+    /// </summary>
+    /// <param name="endpoint">The endpoint to convert</param>
+    /// <returns>The converted endpoint</returns>
     public static implicit operator IPEndPoint(Endpoint endpoint)
     {
         var hostEntry = Dns.GetHostEntry(endpoint.Host);

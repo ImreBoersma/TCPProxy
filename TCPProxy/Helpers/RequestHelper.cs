@@ -49,6 +49,11 @@ public abstract partial class RequestHelper
         }
     }
 
+    /// <summary>
+    /// Removes all headers from the response except for Date, Server and Content-Type
+    /// </summary>
+    /// <param name="input">The response</param>
+    /// <returns>The response with only the allowed headers</returns>
     public static HttpMessage Incognito(HttpMessage input)
     {
         var allowedHeaders = new HashSet<string> {"Date", "Server", "Content-Type"};
@@ -77,6 +82,11 @@ public abstract partial class RequestHelper
         return new HttpMessage(header.ToString(), input.GetBody());
     }
 
+    /// <summary>
+    /// Caches the response
+    /// </summary>
+    /// <param name="input">The response</param>
+    /// <returns>The cached response or the original response if the cache failed</returns>
     public static HttpMessage Cache(HttpMessage input)
     {
         var cacheHelper = new CacheHelper();
@@ -91,9 +101,15 @@ public abstract partial class RequestHelper
         return input;
     }
 
+    /// <summary>
+    /// Regex to extract the source of an image
+    /// </summary>
     [GeneratedRegex("(?<=src=\")([^\\\"']+(jpe?g|png|gif|bmp))", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-GB")]
     private static partial Regex SourceRegex();
 
+    /// <summary>
+    /// Regex to extract the content length from the header
+    /// </summary>
     [GeneratedRegex("(Content-Length:\\s*)(\\d+)")]
     private static partial Regex ContentLengthRegex();
 }

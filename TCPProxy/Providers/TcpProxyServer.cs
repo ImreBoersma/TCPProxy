@@ -12,6 +12,12 @@ public class TcpProxyServer
     private readonly Socket _proxySocket = new(IPAddress.Any.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
     private readonly IBufferHelper _bufferHelper = new BufferHelper();
 
+    /// <summary>
+    ///   Start the proxy server and listen for incoming requests
+    /// </summary>
+    /// <param name="configuration">The proxy configuration</param>
+    /// <param name="cancellationToken">The cancellation token</param>
+    /// <returns>A task</returns>
     public async ValueTask<Task?> StartProxy(ProxyConfigurationModel configuration, CancellationToken cancellationToken)
     {
         Log.Information("Starting proxy...");
@@ -45,6 +51,12 @@ public class TcpProxyServer
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    ///    Process the response from the server before sending it to the client
+    /// </summary>
+    /// <param name="responseMessage">The response from the server</param>
+    /// <param name="configuration">The proxy configuration</param>
+    /// <returns>The processed response</returns>
     public static HttpMessage ProcessResponse(HttpMessage responseMessage, ProxyConfigurationModel configuration)
     {
         var processedMessage = responseMessage;
@@ -67,6 +79,12 @@ public class TcpProxyServer
         return processedMessage;
     }
 
+    /// <summary>
+    ///   Extract the server endpoint from the request
+    /// </summary>
+    /// <param name="message">The request message</param>
+    /// <param name="endpoint">The server endpoint</param>
+    /// <returns>True if the endpoint was extracted, false otherwise</returns>
     public static bool TryExtractServerEndpoint(HttpMessage message, out IPEndPoint endpoint)
     {
         var serverUrl = ExtractHeader(message, HttpRequestHeader.Host);
@@ -81,6 +99,12 @@ public class TcpProxyServer
         return true;
     }
 
+    /// <summary>
+    /// Connect to the server endpoint
+    /// </summary>
+    /// <param name="endpoint">The server endpoint</param>
+    /// <param name="stoppingToken">The cancellation token</param>
+    /// <returns>The server socket</returns>
     public static async ValueTask<Socket> ConnectToServerAsync(IPEndPoint endpoint, CancellationToken stoppingToken)
     {
         var serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -89,17 +113,36 @@ public class TcpProxyServer
         return serverSocket;
     }
 
+    /// <summary>
+    /// Forward the request to the server
+    /// </summary>
+    /// <param name="serverSocket">The server socket</param>
+    /// <param name="requestMessage">The request message</param>
+    /// <param name="stoppingToken">The cancellation token</param>
     private async Task ForwardRequestToServerAsync(Socket serverSocket, HttpMessage requestMessage, CancellationToken stoppingToken)
     {
         await _bufferHelper.ExecuteSendAsync(serverSocket, requestMessage, stoppingToken);
         Log.Information("Forward request to {Server}", serverSocket.RemoteEndPoint?.ToString());
     }
 
+    /// <summary>
+    /// Receive the response from the server
+    /// </summary>
+    /// <param name="serverSocket">The server socket</param>
+    /// <param name="clientBuffer">The client buffer</param>
+    /// <param name="stoppingToken">The cancellation token</param>
+    /// <returns>The response message</returns>
     private async Task<HttpMessage> ReceiveResponseFromServerAsync(Socket serverSocket, byte[] clientBuffer, CancellationToken stoppingToken)
     {
         return await _bufferHelper.ExecuteReceiveAsync(serverSocket, stoppingToken, SocketFlags.None, clientBuffer);
     }
 
+    /// <summary>
+    /// Forward the response to the client
+    /// </summary>
+    /// <param name="clientSocket">The client socket</param>
+    /// <param name="responseMessage">The response message</param>
+    /// <param name="stoppingToken">The cancellation token</param>
     private async Task ForwardResponseToClientAsync(Socket clientSocket, HttpMessage responseMessage, CancellationToken stoppingToken)
     {
         await _bufferHelper.ExecuteSendAsync(clientSocket, responseMessage, stoppingToken);

@@ -31,7 +31,15 @@ public class HttpMessage
         return Encoding.ASCII.GetString(Buffer, 0, Bytes);
     }
 
+    /// <summary>
+    /// Gets the header from the message
+    /// </summary>
+    /// <returns>The header</returns>
     public string GetHeader() => ToString()[..ToString().IndexOf("\r\n\r\n", StringComparison.Ordinal)];
 
+    /// <summary>
+    /// Gets the body from the message
+    /// </summary>
+    /// <returns>The body</returns>
     public string GetBody() => ToString()[(ToString().IndexOf("\r\n\r\n", StringComparison.Ordinal) + 4)..];
 }
