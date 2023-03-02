@@ -20,9 +20,4 @@ public class CacheHelper
     {
         return _cache.TryGetValue(key, out T? value) ? value : default;
     }
-
-    public void Remove(string key)
-    {
-        _cache.Remove(key);
-    }
 }

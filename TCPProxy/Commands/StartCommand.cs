@@ -15,7 +15,7 @@ namespace TCPProxy.Commands;
 [Command(name: "start", Description = "Starts the proxy")]
 public class StartCommand : ICommand
 {
-    private readonly ITcpProxyServer _tcpProxyServer;
+    private readonly TcpProxyServer _tcpProxyServer;
 
     [CommandOption("cache", 'c', Description = "Enable cache")]
     public bool Cache { get; init; } = false;
@@ -33,7 +33,7 @@ public class StartCommand : ICommand
     [CommandOption("buffer", 'b', Description = "Buffer size in bytes")]
     public int BufferSize { get; init; } = 1024;
 
-    public StartCommand(ITcpProxyServer tcpProxyServer)
+    public StartCommand(TcpProxyServer tcpProxyServer)
     {
         _tcpProxyServer = tcpProxyServer;
     }

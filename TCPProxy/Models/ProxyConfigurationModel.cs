@@ -1,4 +1,6 @@
-﻿namespace TCPProxy.Models;
+﻿using Serilog;
+
+namespace TCPProxy.Models;
 
 public record ProxyConfigurationModel
 {
@@ -15,6 +17,16 @@ public record ProxyConfigurationModel
         Incognito = incognito;
         Buffer = buffer;
         Port = port;
+    }
+
+    public void PrintConfig()
+    {
+        Log.Debug("Proxy Started with the following configuration:");
+        Log.Debug("Cache: {Cache}", Cache ? "Enabled" : "Disabled");
+        Log.Debug("Mask images: {MaskImages}", MaskImages ? "Enabled" : "Disabled");
+        Log.Debug("Incognito: {Incognito}", Incognito ? "Enabled" : "Disabled");
+        Log.Debug("Buffer: {Buffer}", Buffer);
+        Log.Debug("Port: {Port}", Port);
     }
 
     public bool GetCache() => Cache;

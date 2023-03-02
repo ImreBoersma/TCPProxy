@@ -51,7 +51,7 @@ public abstract partial class RequestHelper
 
     public static HttpMessage Incognito(HttpMessage input)
     {
-        var allowedHeaders = new HashSet<string> { "Date", "Server", "Content-Type" };
+        var allowedHeaders = new HashSet<string> {"Date", "Server", "Content-Type"};
 
         var header = new StringBuilder();
 
@@ -84,6 +84,7 @@ public abstract partial class RequestHelper
         var id = ExtractHeader(input, HttpRequestHeader.Host);
         if (id is not null)
         {
+            cacheHelper.Add("", input);
             return cacheHelper.Get<HttpMessage>(id) is not null ? cacheHelper.Get<HttpMessage>(id)! : input;
         }
 

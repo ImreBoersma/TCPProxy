@@ -7,10 +7,10 @@ using static TCPProxy.Helpers.RequestHelper;
 
 namespace TCPProxy.Providers;
 
-public class TcpProxyServer : ITcpProxyServer
+public class TcpProxyServer
 {
     private readonly Socket _proxySocket = new(IPAddress.Any.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-    private readonly BufferHelper _bufferHelper = new();
+    private readonly IBufferHelper _bufferHelper = new BufferHelper();
 
     public async ValueTask<Task?> StartProxy(ProxyConfigurationModel configuration, CancellationToken cancellationToken)
     {
@@ -18,7 +18,7 @@ public class TcpProxyServer : ITcpProxyServer
         _bufferHelper.SetBufferSize(configuration.GetBuffer());
         _proxySocket.Bind(new IPEndPoint(IPAddress.Any, configuration.GetPort()));
         _proxySocket.Listen();
-        DebugHelper.PrintConfiguration(configuration);
+        configuration.PrintConfig();
 
         while (!cancellationToken.IsCancellationRequested)
         {

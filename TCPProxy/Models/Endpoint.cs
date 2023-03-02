@@ -44,7 +44,7 @@ public record Endpoint
         Port = port;
     }
 
-    public IPAddress Host { get; } = new(new byte[] { 127, 0, 0, 1 });
+    public IPAddress Host { get; } = new(new byte[] {127, 0, 0, 1});
     public ushort Port { get; } = 80;
 
     public override string ToString()
