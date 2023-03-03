@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using TCPProxy.Commands;
-using TCPProxy.Providers;
+using TCPProxy.Services;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
@@ -11,10 +11,9 @@ Log.Logger = new LoggerConfiguration()
 
 var services = new ServiceCollection();
 
-services.AddSingleton<TcpProxyServer>();
+services.AddSingleton<SocketProxyServer>();
 
 services.AddTransient<StartCommand>();
-
 
 var serviceProvider = services.BuildServiceProvider();
 

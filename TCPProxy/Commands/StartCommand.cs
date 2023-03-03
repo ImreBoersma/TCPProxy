@@ -2,7 +2,7 @@
 using CliFx.Attributes;
 using CliFx.Infrastructure;
 using TCPProxy.Models;
-using TCPProxy.Providers;
+using TCPProxy.Services;
 
 // Disable suggestion to make property get-only (injected by CliFx)
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
@@ -15,7 +15,7 @@ namespace TCPProxy.Commands;
 [Command(name: "start", Description = "Starts the proxy")]
 public class StartCommand : ICommand
 {
-    private readonly TcpProxyServer _tcpProxyServer;
+    private readonly SocketProxyServer _socketProxyServer;
 
     [CommandOption("cache", 'c', Description = "Enable cache")]
     public bool Cache { get; init; } = false;
@@ -33,9 +33,9 @@ public class StartCommand : ICommand
     [CommandOption("buffer", 'b', Description = "Buffer size in bytes")]
     public int BufferSize { get; init; } = 1024;
 
-    public StartCommand(TcpProxyServer tcpProxyServer)
+    public StartCommand(SocketProxyServer socketProxyServer)
     {
-        _tcpProxyServer = tcpProxyServer;
+        _socketProxyServer = socketProxyServer;
     }
 
     /// <summary>
@@ -45,6 +45,6 @@ public class StartCommand : ICommand
     public async ValueTask ExecuteAsync(IConsole console)
     {
         var options = new ProxyConfigurationModel(Cache, MaskImages, Incognito, BufferSize, Port);
-        await _tcpProxyServer.StartProxy(options, new CancellationToken(false));
+        await _socketProxyServer.StartProxy(options, new CancellationToken(false));
     }
 }

@@ -22,11 +22,11 @@ public record ProxyConfigurationModel
     public void PrintConfig()
     {
         Log.Debug("Proxy Started with the following configuration:");
-        Log.Debug("Cache: {Cache}", Cache ? "Enabled" : "Disabled");
-        Log.Debug("Mask images: {MaskImages}", MaskImages ? "Enabled" : "Disabled");
-        Log.Debug("Incognito: {Incognito}", Incognito ? "Enabled" : "Disabled");
-        Log.Debug("Buffer: {Buffer}", Buffer);
-        Log.Debug("Port: {Port}", Port);
+        Log.Debug("\tCache: {Cache}", Cache ? "Enabled" : "Disabled");
+        Log.Debug("\tMask images: {MaskImages}", MaskImages ? "Enabled" : "Disabled");
+        Log.Debug("\tIncognito: {Incognito}", Incognito ? "Enabled" : "Disabled");
+        Log.Debug("\tBuffer: {Buffer}", Buffer);
+        Log.Debug("\tPort: {Port}", Port);
     }
 
     public bool GetCache() => Cache;
