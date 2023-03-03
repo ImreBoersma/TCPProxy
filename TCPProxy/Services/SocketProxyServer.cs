@@ -9,9 +9,8 @@ namespace TCPProxy.Services;
 
 public class SocketProxyServer
 {
-    private readonly Socket _proxySocket = new(IPAddress.Any.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
     private readonly IBufferHelper _bufferHelper = new BufferHelper();
-    private readonly ProxyConfigurationModel _config;
+    private readonly Socket _proxySocket = new(IPAddress.Any.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
     /// <summary>
     ///   Start the proxy server and listen for incoming requests
