@@ -3,9 +3,9 @@ using System.Net.Sockets;
 using Moq;
 using TCPProxy.Helpers;
 using TCPProxy.Models;
-using TCPProxy.Providers;
+using TCPProxy.Services;
 
-namespace TCPProxyTest.Providers;
+namespace TCPProxyTest.Services;
 
 public class TcpProxyServerTests
 {
@@ -15,6 +15,13 @@ public class TcpProxyServerTests
     private const string TestMessageWithoutHostHeader =
         "HTTP/1.1 200 OK\r\nETag: \"1d98-5df1eea3666c0\"\r\n\r\n<!DOCTYPE html><html><body><h2>HTML Image</h2><img src=\"pic_trulli.jpg\"></body></html>";
 
+    private readonly Mock<IBufferHelper> _bufferHelperMock;
+
+    public TcpProxyServerTests()
+    {
+        _bufferHelperMock = new Mock<IBufferHelper>();
+    }
+
     [Fact]
     public void ProcessResponse_ReturnsOriginalMessage_WhenAllFlagsAreFalse()
     {
@@ -23,7 +30,7 @@ public class TcpProxyServerTests
         var config = new ProxyConfigurationModel(false, false, false);
 
         // Act
-        var result = TcpProxyServer.ProcessResponse(message, config);
+        var result = SocketProxyServer.ProcessResponse(message, config);
 
         // Assert
         Assert.Same(message, result);
@@ -37,7 +44,7 @@ public class TcpProxyServerTests
         var config = new ProxyConfigurationModel(false, true, false);
 
         // Act
-        var result = TcpProxyServer.ProcessResponse(message, config);
+        var result = SocketProxyServer.ProcessResponse(message, config);
 
         // Assert
         Assert.NotSame(message, result);
@@ -52,7 +59,7 @@ public class TcpProxyServerTests
         var config = new ProxyConfigurationModel(false, false, true);
 
         // Act
-        var result = TcpProxyServer.ProcessResponse(message, config);
+        var result = SocketProxyServer.ProcessResponse(message, config);
 
         // Assert
         Assert.NotSame(message, result);
@@ -69,7 +76,7 @@ public class TcpProxyServerTests
 
 
         // Act
-        var result = TcpProxyServer.ProcessResponse(message, config);
+        var result = SocketProxyServer.ProcessResponse(message, config);
 
         // Assert
         Assert.Same(message, result);
@@ -82,12 +89,12 @@ public class TcpProxyServerTests
         var message = new HttpMessage(TestMessageWithoutHostHeader);
 
         // Act
-        var result = TcpProxyServer.TryExtractServerEndpoint(message, out var endpoint);
+        var result = SocketProxyServer.TryExtractServerEndpoint(message, out var endpoint);
 
         // Assert
         Assert.False(result);
-        Assert.Equal(IPAddress.Any, endpoint.Address);
-        Assert.Equal(0, endpoint.Port);
+        Assert.Equal(IPAddress.Any, endpoint?.Address);
+        Assert.Equal(0, endpoint?.Port);
     }
 
     [Fact]
@@ -97,19 +104,12 @@ public class TcpProxyServerTests
         var message = new HttpMessage(TestMessage);
 
         // Act
-        var result = TcpProxyServer.TryExtractServerEndpoint(message, out var endpoint);
+        var result = SocketProxyServer.TryExtractServerEndpoint(message, out var endpoint);
 
         // Assert
         Assert.True(result);
-        Assert.Equal(IPAddress.Parse("127.0.0.1"), endpoint.Address);
-        Assert.Equal(80, endpoint.Port);
-    }
-
-    private readonly Mock<IBufferHelper> _bufferHelperMock;
-
-    public TcpProxyServerTests()
-    {
-        _bufferHelperMock = new Mock<IBufferHelper>();
+        Assert.Equal(IPAddress.Parse("127.0.0.1"), endpoint?.Address);
+        Assert.Equal(80, endpoint?.Port);
     }
 
     [Fact]
@@ -126,9 +126,9 @@ public class TcpProxyServerTests
         _bufferHelperMock.Setup(x => x.TakeBuffer(It.IsAny<int>())).Returns(buffer);
 
         // Act
-        var actualSocket = await TcpProxyServer.ConnectToServerAsync(endpoint, cancellationToken);
+        var actualSocket = await SocketProxyServer.TryConnectToServerAsync(endpoint, cancellationToken);
 
         // Assert
-        Assert.Equal(expectedSocket.RemoteEndPoint?.ToString(), actualSocket.RemoteEndPoint?.ToString());
+        Assert.Equal(expectedSocket.RemoteEndPoint?.ToString(), actualSocket?.RemoteEndPoint?.ToString());
     }
 }

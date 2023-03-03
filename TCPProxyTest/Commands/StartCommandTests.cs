@@ -1,8 +1,6 @@
-﻿using CliFx.Infrastructure;
+﻿using Moq;
 using TCPProxy.Commands;
-using TCPProxy.Models;
-using TCPProxy.Providers;
-using Moq;
+using TCPProxy.Services;
 
 namespace TCPProxyTest.Commands;
 
@@ -12,7 +10,7 @@ public class StartCommandTests
     public void Constructor_InitializesProperties()
     {
         // Arrange
-        var tcpProxyServer = new Mock<TcpProxyServer>();
+        var tcpProxyServer = new Mock<SocketProxyServer>();
 
         // Act
         var command = new StartCommand(tcpProxyServer.Object);
