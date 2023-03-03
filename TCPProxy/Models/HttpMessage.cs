@@ -16,6 +16,12 @@ public class HttpMessage
         Bytes = Buffer.Length;
     }
 
+    public HttpMessage(HttpRequestMessage request)
+    {
+        Buffer = Encoding.ASCII.GetBytes(request.Headers + "\r\n\r\n" + request.Content?.ReadAsStringAsync().Result);
+        Bytes = Buffer.Length;
+    }
+
     public HttpMessage(string header, string body)
     {
         Buffer = Encoding.ASCII.GetBytes(header + "\r\n\r\n" + body);
