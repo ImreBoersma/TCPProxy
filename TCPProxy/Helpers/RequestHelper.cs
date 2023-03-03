@@ -19,11 +19,19 @@ public abstract partial class RequestHelper
         try
         {
             var match = Regex.Match(httpMessage.ToString(), $"{searchHeader}:\\s*(.*)\r\n");
-            return match.Success ? match.Groups[1].Value : null;
+            if (match.Success)
+            {
+                var headerValue = match.Groups[1].Value;
+                Log.Debug("Found {SearchHeader} in request: {Header}", searchHeader, headerValue);
+                if (string.IsNullOrEmpty(headerValue)) throw new ArgumentNullException();
+                return match.Success ? headerValue : throw new ArgumentNullException();
+            }
+
+            return null;
         }
         catch (Exception e)
         {
-            Log.Error(e, "Failed to extract header with error: {Error}, returning null", e.Message);
+            Log.Error("Failed to extract header with error: {Error}, returning null: ", e.Message);
             return null;
         }
     }
@@ -44,7 +52,7 @@ public abstract partial class RequestHelper
         }
         catch (Exception e)
         {
-            Log.Error(e, "Failed to mask image with error: {Error}, returning original response", e.Message);
+            Log.Error("Failed to mask image with error: {Error}, returning original response", e.Message);
             return input;
         }
     }
@@ -59,9 +67,6 @@ public abstract partial class RequestHelper
         var allowedHeaders = new HashSet<string> {"Date", "Server", "Content-Type"};
 
         var header = new StringBuilder();
-
-        Log.Information("Attempting to remove headers from response");
-
         var lines = input.GetHeader().Split("\r\n");
 
         foreach (var line in lines)
@@ -74,7 +79,7 @@ public abstract partial class RequestHelper
             }
             catch (Exception e)
             {
-                Log.Error(e, "Failed to remove header with error: {Error}, returning original response", e.Message);
+                Log.Error("Failed to remove header with error: {Error}, returning original response", e.Message);
                 return input;
             }
         }
